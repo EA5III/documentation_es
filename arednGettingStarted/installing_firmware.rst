@@ -4,168 +4,175 @@ Instalación del Firmware AREDN |trade|
 
 Los pasos para instalar el firmware en un dispositivo están documentados en el sitio web de AREDN |trade| en la sección `Current Software <https://www.arednmesh.org/content/current-software>`_. En el menú **Software**, seleccione **Download** para acceder a la página *Current Software*.
 
-Hay dos casos para instalar el firmware AREDN |trade|:
+Se pueden presentar dos casos a la hora de instalar el firmware AREDN |trade|:
 
-1. Si ya tiene una versión de firmware de AREDN |trade| ejecutándose en su dispositivo, puede usar la interfaz web de su computadora para navegar a **Setup > Administration > Firmware Update** para instalar su nuevo firmware. Este proceso se explicará con más detalle en la sección **Configuración Avanzada** de esta guía. Para obtener información adicional vea también *Consejos de Actualizacióón de Firmware* en la sección **Guías Prácticas**.
+1. Si ya tiene una versión de firmware de AREDN |trade| ejecutándose en su dispositivo, puede usar la interfaz web de su computadora para navegar a **Setup > Administration > Firmware Update** para instalar su nuevo firmware. Este proceso se explicará con más detalle en la sección **Configuración Avanzada** de esta guía. Para obtener información adicional vea también *Consejos de Actualización de Firmware* en la sección **Guías Prácticas**.
 
 
 ----------
 
-2. Si está instalando el firmware AREDN |trade| en un dispositivo por primera vez, cada plataforma de hardware puede requerir un procedimiento único.
+2. Si está instalando el firmware AREDN |trade| por primera vez en un dispositivo, cada plataforma de hardware puede requerir un procedimiento único.
 
    .. image:: _images/firmware-install.png
       :alt: Firmware Install Connections
       :align: center
 
 
-  El diagrama anterior muestra que su ordenador con la imagen de firmware descargada debe estar conectado al nodo mediante cable Ethernet para instalar la imagen AREDN |trade|. Es Útil conectar ordenador y nodo a través de un simple switch Ethernet para que éste pueda mantener el enlace con el ordenador mientras se reinicia el nodo.
+  El diagrama anterior muestra que su ordenador con la imagen de firmware descargada debe estar conectado al nodo mediante cable Ethernet para instalar la imagen AREDN |trade|. Es útil conectar ordenador y nodo a través de un simple switch Ethernet para que éste pueda mantener el enlace con el ordenador mientras se reinicia el nodo.
 
 
   Nodos con diferente hardware requerirán métodos diferentes para instalar el firmware AREDN |trade|. Para los dispositivos Ubiquiti, el cliente TFTP de su computadora se conectará al servidor TFTP del nodo para cargar la imagen del firmware. Para los dispositivos TP-LINK y GL-iNET, el navegador web de su ordenador se conectará al servidor web del nodo para cargar la imagen del firmware. Para los dispositivos Mikrotik, su ordenador ejecutará un servidor de arranque remoto y el cliente de arranque remoto del nodo cargará su imagen de arranque desde su computadora. Consulte los procedimientos específicos a continuación para el hardware de su nodo.
 
-Ubiquiti First Install Process
-------------------------------
+Proceso de instalación por primera vez en Ubiquiti
+--------------------------------------------------
 
-**Ubiquiti** devices have a built-in `TFTP <https://en.wikipedia.org/wiki/Trivial_File_Transfer_Protocol>`_ server to which you can upload the AREDN |trade| *factory* image. Your computer must have TFTP client software available. Linux and Mac both have native TFTP clients, but you may need to enable or obtain a TFTP client for Windows computers. If you are using a Windows computer, `enable the TFTP client <https://www.trishtech.com/2014/10/enable-tftp-telnet-in-windows-10/>`_ or download and install another `standalone TFTP client <http://tftpd32.jounin.net/tftpd32_download.html>`_ of your choice.
+Los dispositivos **Ubiquiti** tienen un servidor `TFTP <https://en.wikipedia.org/wiki/Trivial_File_Transfer_Protocol>`_ incorporado al que puede cargar la imagen *factory* de AREDN |trade| . Su ordenador debe tener disponible un software de cliente TFTP. Linux y Mac tienen clientes TFTP nativos, pero es posible que deba habilitar u obtener un cliente TFTP para ordenadores con Windows. Si está utilizando Windows, `habilite el cliente TFTP <https://www.trishtech.com/2014/10/enable-tftp-telnet-in-windows-10/>`_  o descargue e instale otro `cliente TFTP independiente <http://tftpd32.jounin.net/tftpd32_download.html>`_  de su elección.
 
-Different TFTP client programs may have different command line options or flags that must be used, so be sure to study the command syntax for your TFTP client software. The example shown below may not include the specific options required by your client program.
+Los diferentes programas de cliente TFTP pueden tener diferentes opciones de línea de comando o indicadores que deben usarse, así que asegúrese de estudiar la sintaxis de comando para su software de cliente TFTP. El ejemplo que se muestra a continuación puede no incluir las opciones específicas requeridas por su programa cliente.
 
-Download the appropriate *factory* file for your device by following the instructions in the **Downloading AREDN Firmware** section of this documentation.
+Descargue el archivo *factory* apropiado para su dispositivo siguiendo las instrucciones de la sección **Descarga del firmware de AREDN** de esta documentación.
 
-1. Set your computer’s Ethernet network adapter to a static IP address that is a member of the correct subnet for your device. Check the documentation for your specific hardware to determine the correct network number. As in the example below, most Ubiquiti devices have a default IP address of 192.168.1.20, so you can give your computer a static IP on the 192.168.1.x network with a netmask of 255.255.255.0. For example, set your Ethernet adapter to a static IP address of 192.168.1.100.
+1. Configure el adaptador de red Ethernet de su ordenador a una dirección IP estática perteneciente a la subred correcta para su dispositivo. Consulte la documentación de su hardware específico para determinar el número de red correcto. Como en el ejemplo a continuación, la mayoría de los dispositivos Ubiquiti tienen una dirección IP predeterminada de 192.168.1.20, por lo que puede darle a su ordenador una IP estática en la red 192.168.1.x con una máscara de red de 255.255.255.0. Por ejemplo, configure su adaptador Ethernet a una dirección IP estática de 192.168.1.100.
 
-  You can choose any number for the fourth octet, as long as it is not the same as the IP address of the node. Of course you must also avoid using 192.168.1.0 and 192.168.1.255, which are reserved addresses that identify the network itself and the broadcast address for that network. Other devices may have different default IP addresses or subnets, so select a static IP for your computer which puts it on the same subnet but does not conflict with the default IP of the device.
 
-2. Connect an Ethernet cable from your computer to the dumb switch, and another cable from the LAN port of the PoE adapter to the switch.
+  Puede elegir cualquier número para el cuarto octeto, siempre que no sea el mismo de la dirección IP del nodo. Por supuesto, también debe evitar usar 192.168.1.0 y 192.168.1.255, que son direcciones reservadas para identificar la red en sí y la dirección de broadcast de esa red. Otros dispositivos pueden tener diferentes direcciones IP o subredes predeterminadas, por lo tanto, seleccione una IP estática para su ordenador que lo coloque en la misma subred pero que no entre en conflicto con la IP predeterminada del dispositivo.
 
-3. Put the Ubiquiti device into TFTP mode by holding the reset button while plugging your node's Ethernet cable into the POE port on the PoE adapter.
+2. Conecte un cable Ethernet desde su computadora al switch, y otro cable desde el puerto LAN del adaptador PoE al switch.
 
-4. Continue holding the device's reset button for approximately 30 to 45 seconds until you see the LEDs on the node alternating in a 1-3, 2-4, 1-3, 2-4 pattern, then release the reset button.
+3. Ponga el dispositivo Ubiquiti en modo TFTP manteniendo presionado el botón "reset" mientras conecta el cable Ethernet de su nodo en el puerto POE del adaptador PoE.
 
-5. Open a command window on your computer and execute a file transfer command to send the AREDN firmware to your device. Target the default IP address of your Ubiquiti node, such as 192.168.1.20 or 192.168.1.1 for AirRouters. The following is one example of TFTP commands that transfer the firmware image to a node:
+4. Continúe presionando el botón "reset" del dispositivo durante aproximadamente 30 a 45 segundos hasta que vea los LED en el nodo alternando en un patrón 1-3, 2-4, 1-3, 2-4, entonces suelte el botón de "reset".
+
+5. Abra una ventana de comandos en su ordenador y ejecute un comando de transferencia de archivos para enviar el firmware AREDN a su dispositivo. Apunte a la dirección IP predeterminada de su nodo Ubiquiti, como 192.168.1.20 o 192.168.1.1 para AirRouters. El siguiente es un ejemplo de comandos TFTP que transfieren la imagen del firmware a un nodo:
 
   >>>
   [Linux/Mac]
   > tftp 192.168.1.20
-  > bin                 [Transfer in "binary" mode]
-  > trace on            [Show the transfer in progress]
-  > put <full path to the firmware file>
-    [For example, put /temp/aredn-3.19.3.0-ubnt-nano-m-xw-factory.bin]
+  > bin                 [Transferir en modo "binario"]
+  > trace on            [Muestra la transferencia en progreso]
+  > put <ruta completa al archivo de firmware>
+    [Por ejemplo, put /temp/aredn-3.19.3.0-ubnt-nano-m-xw-factory.bin]
   -----------------------------------
-  [Windows with command on a single line]
+  [Windows con una única línea de comandos]
   > tftp -i 192.168.1.20 put C:\temp\aredn-3.19.3.0-ubnt-nano-m-xw-factory.bin
 
-  The TFTP client should indicate that data is being transferred and eventually completes.
+  El cliente TFTP debe indicar que los datos se están transfiriendo y que la transferencia se ha completado.
 
-6. Watch the LEDs for about 2-3 minutes until the node has finished rebooting. The reboot is completed when the LED 4 light (farthest on the right) is lit and is steady green.
+6. Observe los LED durante aproximadamente 2-3 minutos hasta que el nodo haya terminado de reiniciarse. El reinicio se completa cuando la luz del LED 4 (la más a la derecha) está encendida y se mantiene en verde.
 
-7. Configure your computer’s Ethernet network interface to use DHCP for obtaining an IP address from the node. You may need to unplug/reconnect the Ethernet cable from your computer to force it to get a new IP address from the node.
+7. Configure la interfaz de red Ethernet de su ordenador para usar DHCP para obtener una dirección IP del nodo. Es posible que deba desconectar y volver a conectar el cable Ethernet del ordenador para forzarla a obtener una nueva dirección IP del nodo.
 
-8. After the node reboots, open a web browser and enter the following URL: ``http://localnode.local.mesh``  Some computers may have DNS search paths configured that require you to use the `fully qualified domain name (FQDN) <https://en.wikipedia.org/wiki/Fully_qualified_domain_name>`_ to resolve *localnode* to the mesh node's IP address.
+8. Después de que el nodo se haya reiniciado, abra un navegador web e ingrese la siguiente URL: http://localnode.local.mesh Algunos ordenadores pueden tener rutas de búsqueda de DNS configuradas que requieren que use el `nombre de dominio cualificado completo (FQDN) <https://en.wikipedia.org/wiki/Fully_qualified_domain_name>`_ para resolver *localnode* a la dirección IP del nodo mesh.
 
-9. Navigate to the *Setup* page and configure the new “firstboot” node as described in the **Basic Radio Setup** section.
+9. Navegue a la página *Setup* y configure el "firstboot" del nuevo nodo "firstboot" como se describe en la sección **Basic Radio Setup (Configuración básica de radio)**.
 
-TP-LINK First Install Process
------------------------------
 
-Preferred Process
-+++++++++++++++++
+Proceso de instalación por primera vez en TP-LINK 
+-------------------------------------------------
+Proceso Recomendado
++++++++++++++++++++
 
-**TP-LINK** devices currently allow you to use the manufacturer's pre-installed *PharOS* web browser user interface to upload and apply new firmware images. This is the most user-friendly way to install AREDN |trade| firmware. Navigate to the *Setup* section to select and upload new firmware. Check the TP-LINK documentation for your device if you have questions about using their built-in user interface.
+Actualmente los dispositivos **TP-LINK** permiten utilizar la interfaz de usuario del navegador web *PharOS* preinstalada por el fabricante para cargar y aplicar nuevas imágenes de firmware. Esta es la forma más fácil de instalar el firmware AREDN |trade|. Vaya a la sección *Setup* para seleccionar y cargar nuevo firmware. Consulte la documentación de TP-LINK para su dispositivo si tiene dudas sobre el uso de su interfaz de usuario incorporada.
 
-Alternate Process
-+++++++++++++++++
+Proceso Alternativo
++++++++++++++++++++
 
-TP-LINK devices also have a built-in :abbr:`TFTP (Trivial File Transfer Protocol)` and `Bootp <https://en.wikipedia.org/wiki/Bootstrap_Protocol>`_ client which allows them to obtain new firmware from an external source. Your computer must run a TFTP/Bootp server in order to provide firmware images to the node. In certain situations you may need to use this method to update the firmware or to restore a TP-LINK recovery file by following the steps below.
+Los dispositivos TP-LINK también llevan incorporado un cliente :abbr:`TFTP (Trivial File Transfer Protocol)` y `Bootp <https://en.wikipedia.org/wiki/Bootstrap_Protocol>`_ que les permite obtener nuevo firmware de una fuente externa. Su ordenador debe ejecutar un servidor TFTP / Bootp para proporcionar imágenes de firmware al nodo. En ciertas situaciones, es posible que necesite usar este método para actualizar el firmware o para restaurar un archivo de recuperación de TP-LINK siguiendo los pasos a continuación.
 
-*Preparation*
+*Preparación*
 
-1. Download the appropriate TP-LINK *factory* file and rename this file as ``recovery.bin``
+1. Descargue el archivo TP-LINK *factory* apropiado y renómbrelo como ``recovery.bin`` 
 
-2. Set your computer’s Ethernet network adapter to a static IP address that is a member of the correct subnet for your device. Check the documentation for your specific hardware to determine the correct network number. As in the example below, most TP-LINK devices use the 192.168.0.x subnet by default, so you can give your computer a static IP such as 192.168.0.100 with a netmask of 255.255.255.0.
+2. Configure el adaptador de red Ethernet de su ordenador a una dirección IP estática que sea miembro de la subred correcta para su dispositivo. Consulte la documentación de su hardware especéfico para determinar el número de red correcto. Como en el ejemplo a continuación, la mayoría de los dispositivos TP-LINK usan la subred 192.168.0.x de manera predeterminada, por lo que puede darle a su ordenador una IP estática como 192.168.0.100 con una máscara de red de 255.255.255.0.
 
-  You can choose any number for the fourth octet, as long as it is not the same as the IP address of the node and is not within the range of DHCP addresses you will be providing in step 2 below. Of course you must also avoid using 192.168.0.0 and 192.168.0.255, which are reserved addresses that identify the network itself and the broadcast address for that network. Other devices may have different default IP addresses or subnets, so select a static IP for your computer which puts it on the same subnet.
+  Puede elegir cualquier número para el cuarto octeto, siempre que no sea la misma que la dirección IP del nodo y no esté dentro del rango de direcciones DHCP que proporcionará en el paso 2 a continuación. Por supuesto, también debe evitar usar 192.168.0.0 y 192.168.0.255, que son direcciones reservadas que identifican la red en sí y la dirección de difusión de esa red. Otros dispositivos pueden tener diferentes direcciones IP o subredes predeterminadas, así que seleccione una IP estática para su ordenador que la coloque en la misma subred.
 
-3. Connect an Ethernet cable from your computer to the dumb switch, and another cable from the LAN port of the PoE adapter to the switch.
 
-*Linux Procedure*
+3. Conecte un cable Ethernet desde su ordenador al switch, y otro cable desde el puerto LAN del adaptador PoE al switch.
 
-1. Create a directory on your computer called ``/tftp`` and copy the TP-LINK ``recovery.bin`` file there.
 
-2. Determine your computer’s Ethernet interface name with ``ifconfig``. It will be the interface you set to 192.168.0.100 above. You will use this interface name in the command below as the name after ``-i`` and you must substitute your login user name after ``-u`` below. Use a ``dhcp-range`` of IP addresses that are also on the same subnet as the computer: for example 192.168.0.110,192.168.0.120 as shown below.
+*Procedimiento para Linux*
 
-3. Become ``root`` and open a terminal window to execute the following dnsmasq command:
+1. Cree un directorio en su ordenador llamado ``/tftp`` copie allí el archivo TP-LINK ``recovery.bin``.
+
+2. Determine el nombre de la interfaz Ethernet de su ordenador con ``ifconfig``. Será la interfaz que estableció más arriba en 192.168.0.100. Utilizará este nombre de interfaz en el comando a continuación como el nombre después de  ``-i`` y debe sustituir su nombre de usuario de inicio de sesióndespués de ``-u``. Utilice una ``dhcp-range`` (rango de direcciones) IP que también estén en la misma subred que el ordenador: por ejemplo 192.168.0.110,  192.168.0.120 como se muestra a continuación.
+
+
+3. Hágase ``root`` y abra una ventana de terminal para ejecutar el siguiente comando dnsmasq:
 
   >>>
   (root)# dnsmasq -i eth0 -u joe --log-dhcp --bootp-dynamic \
         --dhcp-range=192.168.0.110,192.168.0.120 -d -p0 -K \
         --dhcp-boot=recovery.bin --enable-tftp --tftp-root=/tftp/
 
-4. With the PoE unit powered off, connect an Ethernet cable from the TP-LINK node to the POE port.
+4. Con la unidad PoE apagada, conecte un cable Ethernet desde el nodo TP-LINK al puerto POE.
 
-5. Push the reset button on the TP-LINK and hold it while powering on the PoE unit.  Continue to hold the reset button until you see output information from the computer window where you ran the dnsmasq command, which should happen after about 10 seconds.  Release the reset button as the computer starts communicating with the node.  When you see the "sent" message, this indicates success, and the TP-LINK node has downloaded the image and will reboot. You can now <ctrl>C or kill dnsmasq.
+5. Presione el botón reset en el TP-LINK y manténgalo presionado mientras enciende la unidad PoE. Continúe presionando el botón de reinicio hasta que vea la información de salida en la terminal del ordenador donde ejecutó el comando dnsmasq, lo que debería ocurrir después de unos 10 segundos. Suelte el botón de reinicio cuando el ordenador comience a comunicarse con el nodo. Cuando vea el mensaje "sent" (enviado), esto indica que el nodo TP-LINK ha descargado la imagen exitosamente y se reiniciará. Ahora puede hacer <ctrl> C o kill dnsmasq.
 
-*Windows Procedure*
 
-You will need `Tiny PXE <http://reboot.pro/files/file/303-tiny-pxe-server/>`_ software on your Windows computer. Download this software and extract it on your computer.
+*Procedimiento para Windows*
 
-1. Navigate to the folder where you extracted the *Tiny PXE* software and edit the ``config.ini`` file.  Directly under the ``[dhcp]`` tag, add the following line:  ``rfc951=1`` then save and close the file.
+Necesitará el software `Tiny PXE <http://reboot.pro/files/file/303-tiny-pxe-server/>`_ en su ordenador con Windows. Descargue este software y extráigalo en su ordenador.
 
-2. Copy the ``recovery.bin`` firmware image into the ``files`` folder under the Tiny PXE server directory location.
+1. Navegue a la carpeta donde extrajo el software *Tiny PXE* y edite el archivo ``config.ini``. Directamente debajo de la etiqueta ``[dhcp]``, agregue la siguiente línea: ``rfc951=1`` luego guarde y cierre el archivo.
 
-3. Start the Tiny PXE server exe and select your Ethernet interface IP from the dropdown list called ``Option 54 [DHCP Server]``, making sure to check the ``Bind IP`` checkbox. Under the "Boot File" section, enter ``recovery.bin`` into the the *Filename* field, and uncheck the checkbox for "Filename if user-class = gPXE or iPXE". Click the *Online* button at the top of the Tiny PXE window.
+2. Copie la imagen del firmware ``recovery.bin`` en la carpeta ``files`` debajo de la ubicación del directorio del servidor Tiny PXE.
+
+3. Inicie el servidor Tiny PXE exe y seleccione su IP de interfaz Ethernet de la lista desplegable llamada ``Option 54 [DHCP Server]``, asegurándose de marcar la casilla ``Bind IP``. En la sección "Boot File", ingrese ``recovery.bin`` en el campo *Filename* y desactive la casilla de verificación "Filename if user-class = gPXE or iPXE". Haga clic en el botón *Online* en la parte superior de la ventana de Tiny PXE.
+
 
 .. image:: _images/tiny-pxe-tpl.png
   :alt: Tiny PXE Display
   :align: center
 
-4. With the PoE unit powered off, connect an Ethernet cable from the TP-LINK node to the POE port. Press and hold the reset button on the node while powering on the PoE unit.
+4. Con la unidad PoE apagada, conecte un cable Ethernet desde el nodo TP-LINK al puerto POE. Mantenga presionado el botón de reinicio en el nodo mientras enciende la unidad PoE.
 
-5. Continue holding the reset button until you see ``TFTPd: DoReadFile: recovery.bin`` in the Tiny PXE log window.
+5. Continúe presionando el botón reset hasta que vea ``TFTPd: DoReadFile: recovery.bin`` en la ventana de log de Tiny PXE.
 
-6. Release the node’s reset button and click the *Offline* button in Tiny PXE.  You are finished using Tiny PXE when the firmware image has been read by the node.
+6. Suelte el botón reset del nodo y haga clic en el botón *Offline* en Tiny PXE. Ha terminado de usar Tiny PXE cuando el nodo ha leído la imagen del firmware.
 
-*Final Configuration Steps*
+*Pasos Finales de la Configuración*
 
-1. Configure your computer’s Ethernet network interface to use DHCP for obtaining an IP address from the node.
+1. Configure la interfaz de red Ethernet de su ordenador para usar DHCP para obtener una dirección IP del nodo.
 
-2. After the node reboots, open a web browser and enter the following URL: ``http://localnode.local.mesh``  Some computers may have DNS search paths configured that require you to use the `fully qualified domain name (FQDN) <https://en.wikipedia.org/wiki/Fully_qualified_domain_name>`_ to resolve *localnode* to the mesh node's IP address.
+2. Después de que se reinice el nodo, abra un navegador web e ingrese la siguiente URL: ``http://localnode.local.mesh`` Algunos ordenadores pueden tener rutas de búsqueda de DNS configuradas que requieren que use el `fully qualified domain name (FQDN) <https://en.wikipedia.org/wiki/Fully_qualified_domain_name>`_  para resolver el n*localnode* a la dirección IP del nodo de la malla.
 
-3. Navigate to the *Setup* page and configure the new “firstboot” node as described in the **Basic Radio Setup** section.
+3. Navegue a la página *Setup* y configure el "firstboot" del nuevo nodo  como se describe en la sección **Basic Radio Setup (Configuración básica de radio)** 
 
-Mikrotik First Install Process
-------------------------------
 
-**Mikrotik** devices must be flashed using steps that are similar to the alternate TP-LINK process described above. Your computer must run a TFTP/Bootp server in order to provide firmware images to Mikrotik nodes. Mikrotik nodes require a **two-part install** process: First, install and boot the correct mikrotik-vmlinux-initramfs file with the **elf** extension, and then use the in-memory-only AREDN |trade| Administration UI to complete the installation of the appropriate mikrotik-rb file with the **bin** extension.
+Proceso de instalación por primera vez en Mikrotik
+--------------------------------------------------
 
-**Preparation**
+Los dispositivos **Mikrotik** se deben flashear usando unos pasos que son similares al proceso alternativo TP-LINK descrito anteriormente. Su ordenador debe ejecutar un servidor TFTP / Bootp para proporcionar imágenes de firmware a los nodos Mikrotik. Los nodos Mikrotik requieren un proceso de **instalación en dos partes** : primero, instale y arranque el archivo mikrotik-vmlinux-initramfs correcto con la extensión **elf**, y luego use la interfaz de administración de usuario AREDN |trade| solo-en-memoria para completar la instalación del archivo mikrotik-rb con la extensión **bin**.
 
-1. Download the appropriate Mikrotik **elf** and **bin** files. Rename the *elf* file to ``rb.elf`` and keep the *bin* file available for later.
 
-2. Set your computer’s Ethernet network adapter to a static IP address that is a member of the correct subnet for your device. Check the documentation for your specific hardware to determine the correct network number. As in the example below, most Mikrotik devices use the 192.168.1.x subnet by default, so you can give your computer a static IP such as 192.168.1.100 with a netmask of 255.255.255.0.
+**Preparación**
 
-  You can choose any number for the fourth octet, as long as it is not the same as the IP address of the node and is not within the range of DHCP addresses you will be providing in step 2 below. Of course you must also avoid using 192.168.1.0 and 192.168.1.255, which are reserved addresses that identify the network itself and the broadcast address for that network. Other devices may use different default subnets, such as QRT units which use 192.168.88.x. Select a static IP for your computer which puts it on the same subnet as your device.
+1. Descargue los archivos apropiados de Mikrotik **elf** y **bin**. Cambie el nombre del archivo *elf* a ``rb.elf`` y mantenga el archivo bin disponible para más adelante.
+2. Configure el adaptador de red Ethernet de su ordenador a una dirección IP estática que sea miembro de la subred correcta para su dispositivo. Consulte la documentación de su hardware específico para determinar el número de red correcto. Como en el ejemplo a continuación, la mayoría de los dispositivos Mikrotik usan la subred 192.168.1.x de manera predeterminada, por lo que puede darle a su ordenador una IP estática como 192.168.1.100 con una máscara de red de 255.255.255.0.
 
-3. Connect an Ethernet cable from your computer to the dumb switch, and another cable from the LAN port of the PoE adapter to the switch. If you are flashing a Mikrotik hAP ac lite device, connect the Ethernet cable from *Port 1* of the Mikrotik to the dumb switch.
+  Puede elegir cualquier número para el cuarto octeto, siempre que no sea la misma que la dirección IP del nodo y no esté dentro del rango de direcciones DHCP que proporcionará en el paso 2 a continuación. Por supuesto, también debe evitar usar 192.168.1.0 y 192.168.1.255, que son direcciones reservadas que identifican la red en sí y la dirección de difusión de esa red. Otros dispositivos pueden usar diferentes subredes predeterminadas, como las unidades QRT que usan 192.168.88.x. Seleccione una IP estática para su ordenador que la coloque en la misma subred que su dispositivo.
 
-**Linux Procedure**
+3. Conecte un cable Ethernet desde su ordenador al switch, y otro cable desde el puerto LAN del adaptador PoE al switch. Si está flasheando un dispositivo Mikrotik hAP ac lite, conecte el cable Ethernet desde *Port 1* del Mikrotik al switch.
 
-1. Create a directory on your computer called ``/tftp`` and copy the ``rb.elf`` file there.
+**Procedimiento de Linux**
 
-2. Determine your computer’s Ethernet interface name with ``ifconfig``. It will be the interface you set to 192.168.1.100 above. You will use this interface name in the command below as the name after ``-i`` and you must substitute your login user name after ``-u`` below. Use a ``dhcp-range`` of IP addresses that are also on the same subnet as the computer: for example 192.168.1.110,192.168.1.120 as shown below.
+1. Cree un directorio en su ordenador llamado ``/tftp`` copie ahí el archivo ``rb.elf``.
 
-3. Become ``root`` and open a terminal window to execute the following dnsmasq command:
+2. Determine el nombre de la interfaz Ethernet de su ordenador con ``ifconfig``. Será la interfaz que establezca en 192.168.1.100. Utilizará este nombre de interfaz en el comando que se muestra más abajo como el nombre después de ``-i`` y debe escribir su nombre de usuario de inicio de sesión después de ``-u``. Utilice un rango ``dhcp-range`` de direcciones IP que también esté en la misma subred que el ordenador: por ejemplo 192.168.1.110,192.168.1.120 como se muestra a continuación.
+
+3. Hágase ``root`` y abra una ventana de terminal para ejecutar el siguiente comando dnsmasq:
 
   >>>
   (root)# dnsmasq -i eth0 -u joe --log-dhcp --bootp-dynamic \
         --dhcp-range=192.168.1.110,192.168.1.120 -d -p0 -K \
         --dhcp-boot=rb.elf --enable-tftp --tftp-root=/tftp/
 
-4. With the PoE unit powered off, connect the Mikrotik node to the POE port. Press and hold the reset button on the Mikrotik while powering on the PoE unit or the hAP device.
+4. Con la unidad PoE apagada, conecte el nodo Mikrotik al puerto POE. Mantenga presionado el botón **reset** del Mikrotik mientras enciende la unidad PoE o el dispositivo hAP.
 
-5. Continue to hold the reset button until you see output information from the computer window where you ran the dnsmasq command, which should happen after about ten seconds. Release the reset button as the computer starts communicating with the node. When you see the "sent" message, this indicates success, and the node has downloaded the image and will reboot. You can now <ctrl>C or kill dnsmasq.
+5. Continúe presionando el botón de reinicio hasta que vea la información de salida en la ventana del ordenador donde ejecutó el comando dnsmasq, que debería aparecer después de unos diez segundos. Suelte el botón de reinicio cuando el ordenador comience a comunicarse con el nodo. Cuando vea el mensaje "enviado", esto indica éxito, y el nodo ha descargado la imagen y se reiniciará. Ahora puede hacer <ctrl> C o kill al proceso dnsmasq.
 
-**Windows Procedure**
+**Procedimiento en Windows**
 
 You will need `Tiny PXE <http://reboot.pro/files/file/303-tiny-pxe-server/>`_ software on your Windows computer. Download this software and extract it on your computer.
 
